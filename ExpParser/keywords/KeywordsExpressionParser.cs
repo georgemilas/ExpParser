@@ -65,7 +65,7 @@ namespace ExpParser.keywords
         public override IEvaluableExpression Parse(string kexp)
         {
             kexp = kexp.Trim();
-            kexp = Parentheses(kexp, ParanthesesTokenHandler);
+            kexp = Parentheses(kexp, ParenthesesTokenHandler);
             //all expressions between parentheses are tokenized and so are Regex and literals
             //so reduce "and, or, not" with the rest of tokens
             kexp = kexp.Replace(" not ", " |not|");
@@ -78,7 +78,18 @@ namespace ExpParser.keywords
 
             //OR has lower precedence then AND, 
             //so split OR's, split AND's then do AND's and then do OR's
-            List<string> orList = kexp.SplitClean("|or|");   
+            IEvaluableExpression exp = GetOrExpression(kexp);
+            return exp;
+        }
+
+        /// <summary>
+        /// Handle OR operator
+        /// </summary>
+        /// <param name="kexp"></param>
+        /// <returns></returns>
+        protected virtual IEvaluableExpression GetOrExpression(string kexp)
+        {
+            List<string> orList = kexp.SplitClean("|or|");
             List<IEvaluableExpression> ors = new List<IEvaluableExpression>();
             IEvaluableExpression exp = null;
             if (orList.Count > 1)
@@ -94,11 +105,22 @@ namespace ExpParser.keywords
             {
                 exp = GetAndExpression(orList[0]);
             }
-
             return exp;
-        }    
+        }
 
-        protected IEvaluableExpression GetAndExpression(string k)
+        /// <summary>
+        /// Handle AND and NOT operators 
+        /// </summary>
+        protected virtual IEvaluableExpression GetAndExpression(string k)
+        {
+            return GetAndExpression(k, GetToken);   
+        }
+
+        /// <summary>
+        /// Handle AND and NOT operators and continue (next function) with handling the operator attribute 
+        /// By default operator attribute is a Token (aka next=GetToken) but pass a different handler to extend the parser 
+        /// </summary>
+        protected virtual IEvaluableExpression GetAndExpression(string k, Func<string, IEvaluableExpression> next)
         {
             List<string> andList= k.SplitClean("|and|"); 
             if ( andList.Count > 1 )
@@ -109,11 +131,11 @@ namespace ExpParser.keywords
                     if (a.Contains("|not|"))
                     {
                         string ka = a.Replace("|not|", "");
-                        ands.Add(new ExpressionTree(this.Semantic.NOT, GetToken(ka)));
+                        ands.Add(new ExpressionTree(this.Semantic.NOT, next(ka)));
                     }
                     else
                     {
-                        ands.Add(GetToken(a));
+                        ands.Add(next(a));
                     }
                 }
                 return new ExpressionTree(this.Semantic.AND, ands);
@@ -129,26 +151,30 @@ namespace ExpParser.keywords
                     }
                     else
                     {
-                        string token = tokensContainer.GetToken(k);
-                        if (token.Contains("|not|"))
+                        string stoken = tokensContainer.GetToken(k);
+                        if (stoken.Contains("|not|"))
                         {
-                            Token kw = new Token(token.Replace("|not|", ""));
-                            this.tokens.Add(kw);
-                            return new ExpressionTree(this.Semantic.NOT, kw);
+                            string ka = stoken.Replace("|not|", "");
+                            return new ExpressionTree(this.Semantic.NOT, next(ka));
                         }
                         else
                         {
-                            Token kw = new Token(token);
-                            this.tokens.Add(kw);
-                            return kw;
+                            return next(stoken);
                         }
                     }
                 }
                 else
                 {
-                    Token kw = new Token(k);
-                    this.tokens.Add(kw);
-                    return kw;
+                    if (k.Contains("|not|"))
+                    {
+                        string ka = k.Replace("|not|", "");
+                        return new ExpressionTree(this.Semantic.NOT, next(ka));
+                    }
+                    else
+                    {
+                        return next(k);
+                    }
+                    
                 }             
                 
             }

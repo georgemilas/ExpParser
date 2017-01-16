@@ -40,10 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="arithmetic\ArithmeticSemantic.cs" />
+    <Compile Include="arithmetic\Division.cs" />
     <Compile Include="arithmetic\IArithmeticSemantic.cs" />
     <Compile Include="arithmetic\ArithmeticExpressionParser.cs" />
     <Compile Include="arithmetic\ArithmenticTester.cs" />
     <Compile Include="arithmetic\ArithmeticOperator.cs" />
+    <Compile Include="arithmetic\Minus.cs" />
+    <Compile Include="arithmetic\Multiply.cs" />
+    <Compile Include="arithmetic\Plus.cs" />
+    <Compile Include="arithmetic\Pow.cs" />
     <Compile Include="BaseParser.cs" />
     <Compile Include="exception\EvaluationException.cs" />
     <Compile Include="exception\ParsingException.cs" />

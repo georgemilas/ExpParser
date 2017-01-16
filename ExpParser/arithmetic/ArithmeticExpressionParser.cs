@@ -37,7 +37,7 @@ namespace ExpParser.arithmetic
         public override IEvaluableExpression Parse(string kexp)
         {
             kexp = kexp.Trim();
-            kexp = Parentheses(kexp, ParanthesesTokenHandler);
+            kexp = Parentheses(kexp);
             //all expressions between parentheses are tokenized and so are Regex and literals
             //so reduce "and, or, not" with the rest of tokens
             
@@ -52,26 +52,6 @@ namespace ExpParser.arithmetic
             //+- has lower precedence than */ which has lower precedence than ^  
             //so split +-, split */, split ^ then evaluate ^, evaluate */, evaluate +-
             var exp = GetPlusExpression(kexp);
-            return exp;
-        }
-
-        protected IEvaluableExpression GetOperatorExpression(string kexp, string tokenStr, IOperator op, Func<string, IEvaluableExpression> next)
-        {
-            List<string> opList = kexp.SplitClean(tokenStr);  // |-|, |+|, |*| ... 
-            List<IEvaluableExpression> opExpressions = new List<IEvaluableExpression>();
-            IEvaluableExpression exp = null;
-            if (opList.Count > 1)
-            {
-                foreach (string k in opList)
-                {
-                    opExpressions.Add(next(k));
-                }
-                exp = new ExpressionTree(op, opExpressions);
-            }
-            else
-            {
-                exp = next(opList[0]);
-            }
             return exp;
         }
 
@@ -95,27 +75,29 @@ namespace ExpParser.arithmetic
         {
             return GetOperatorExpression(kexp, "|^|", this.Semantic.POW, GetToken);  //GetTokenExpression
         }
-        //protected IEvaluableExpression GetTokenExpression(string k)
-        //{
-        //    if (tokensContainer.IsValueAnEvaluableExpression(k))
-        //    {
-        //        return tokensContainer.GetExpression(k);
-        //    }
-        //    else
-        //    {
-        //        Token kw;
-        //        if (tokensContainer.ContainsKey(k))
-        //        {
-        //            string token = tokensContainer.GetToken(k);
-        //            kw = new Token(token);                    
-        //        }
-        //        else
-        //        {
-        //            kw = new Token(k);                    
-        //        }
-        //        this.tokens.Add(kw);
-        //        return kw;
-        //    }
-        //}
+
+
+        protected IEvaluableExpression GetOperatorExpression(string kexp, string tokenStr, IOperator op, Func<string, IEvaluableExpression> next)
+        {
+            List<string> opList = kexp.SplitClean(tokenStr);  // |-|, |+|, |*| ... 
+            List<IEvaluableExpression> opExpressions = new List<IEvaluableExpression>();
+            IEvaluableExpression exp = null;
+            if (opList.Count > 1)
+            {
+                foreach (string k in opList)
+                {
+                    opExpressions.Add(next(k));
+                }
+                exp = new ExpressionTree(op, opExpressions);
+            }
+            else
+            {
+                exp = next(opList[0]);
+            }
+            return exp;
+        }
+
+
     }
+
 }

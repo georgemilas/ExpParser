@@ -10,8 +10,6 @@ namespace ExpParser
         public string StringToBeParsed { get; set; }
 
         protected TokensContainer tokensContainer;  //state helper
-        protected List<Token> _tokens;              //list of all tokens that are not Expression trees themselves
-        protected delegate string TokenHandler(string token, string tokenHash);
         private IEvaluableExpression _expression;
         
         public BaseParser(string expressionToBeParsed, ISemantic semantic)
@@ -22,27 +20,24 @@ namespace ExpParser
         }
 
         /// <summary>
-        /// TokenEvaluator if the current Keywords Expression matches the given text
-        /// </summary>
-        public virtual object Evaluate(object obj)
-        {
-            return this.Expression.Evaluate(obj);
-        }
-
-        /// <summary>
         /// list of all tokens that are not Expression trees themselves
         /// </summary>
-        protected List<Token> tokens
-        {
-            get { return _tokens; }
-            set { _tokens = value; }
-        }
+        protected List<Token> tokens { get; set; }
 
         /// <summary>
         /// Provides abstraction over how tokens are evaluated
         /// </summary>
         public ISemantic Semantic { get; set; }
 
+
+        /// <summary>
+        /// TokenEvaluator if the current Keywords Expression matches the given text
+        /// </summary>
+        public virtual object Evaluate(object obj)
+        {
+            return this.Expression.Evaluate(obj);
+        }
+        
         /// <summary>
         /// an evaluable Expression tree 
         /// </summary>
@@ -92,8 +87,6 @@ namespace ExpParser
         }
 
 
-
-
         /// <summary>
         /// Tokenize expressions between quotes 
         /// </summary>
@@ -141,7 +134,7 @@ namespace ExpParser
         /// tokenize a statement and set in the TokensContainer 
         /// as  container[token#statement_hash] = IEvaluableExpression
         /// </summary>
-        protected virtual string ParanthesesTokenHandler(string token, string tokenHash)
+        protected virtual string ParenthesesTokenHandler(string token, string tokenHash)
         {
             //strip out '(' and ')' and recursively Parse sub Expression (sub parentheses)
             IEvaluableExpression tval = Parse(token.Slice(1, -1));
@@ -155,13 +148,13 @@ namespace ExpParser
         /// </summary>
         protected virtual string Parentheses(string kexp) 
         {
-            return Parentheses(kexp, ParanthesesTokenHandler);
+            return Parentheses(kexp, ParenthesesTokenHandler);
         }
-        protected virtual string Parentheses(string kexp, TokenHandler tokenHandler)
+        protected virtual string Parentheses(string kexp, Func<string, string, string> tokenHandler)
         {
             return Parentheses(kexp, tokenHandler, '(', ')');
         }
-        protected virtual string Parentheses(string kexp, TokenHandler tokenHandler, char open, char close)
+        protected virtual string Parentheses(string kexp, Func<string, string, string> tokenHandler, char open, char close)
         {
             int openCnt = 0;
             List<int> ixopen = new List<int>();

@@ -48,7 +48,8 @@ namespace ExpParser
 
         public string GetTokenHash(string token)
         {
-            return token.GetHashCode().ToString().Replace("-", "N");
+            //the token hash must be lowercase as these parsers should be case insensitive
+            return token.GetHashCode().ToString().Replace("-", "n");  
         }
 
     }

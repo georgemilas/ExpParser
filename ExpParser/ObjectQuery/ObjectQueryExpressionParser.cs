@@ -22,7 +22,7 @@ namespace ExpParser.ObjectQuery
         public override IEvaluableExpression Parse(string kexp)
         {
             kexp = kexp.Trim();
-            kexp = Parentheses(kexp, ParanthesesTokenHandler);
+            kexp = Parentheses(kexp, ParenthesesTokenHandler);
             //all expressions between parentheses are tokenized and so are Regex and literals
             //so reduce "and, or, not" with the rest of tokens
             
@@ -50,93 +50,16 @@ namespace ExpParser.ObjectQuery
             //kexp = kexp.Replace(" ", "|or|");   // we are not supporting space " " as an OR for the API language
 
             //OR has lower precedence then AND, 
-            //so split OR's, split AND's then do AND's and then do OR's
-            List<string> orList = kexp.SplitClean("|or|");
-            List<IEvaluableExpression> ors = new List<IEvaluableExpression>();
-            IEvaluableExpression exp = null;
-            if (orList.Count > 1)
-            {
-                foreach (string k in orList)
-                {
-                    //will reduce "not" before reducing "and parts":
-                    ors.Add(GetAndExpression(k));
-                }
-                exp = new ExpressionTree(this.Semantic.OR, ors);
-            }
-            else
-            {
-                exp = GetAndExpression(orList[0]);
-            }
-
+            //so split OR's, split AND's handle NOT and comparer operators then do AND's and then do OR's
+            //NOT takes precedence over comparer operators so "not a = b" is the same as "(not a) = b"
+            IEvaluableExpression exp = GetOrExpression(kexp);
             return exp;
         }
-
-        protected IEvaluableExpression GetAndExpression(string k)
+        protected override IEvaluableExpression GetAndExpression(string k)
         {
-            List<string> andList = k.SplitClean("|and|");
-            if (andList.Count > 1)
-            {
-                List<IEvaluableExpression> ands = new List<IEvaluableExpression>();
-                foreach (string a in andList)
-                {
-                    if (a.Contains("|not|"))
-                    {
-                        string ka = a.Replace("|not|", "");
-                        ands.Add(new ExpressionTree(this.Semantic.NOT, GetComparerOperatorExpression(ka)));
-                    }
-                    else
-                    {
-                        ands.Add(GetComparerOperatorExpression(a));
-                    }
-                }
-                return new ExpressionTree(this.Semantic.AND, ands);
-            }
-            else
-            {
-                if (tokensContainer.ContainsKey(k))
-                {
-                    return GetNotExpression(k);  //not takes precedence over comparer operators so "not a eq b" is the same as "(not a) eq b"
-                }
-                else
-                {
-                    if (k.Contains("|not|"))
-                    {
-                        string ka = k.Replace("|not|", "");
-                        return new ExpressionTree(this.Semantic.NOT, GetComparerOperatorExpression(ka));
-                    }
-                    else
-                    {
-                        return GetComparerOperatorExpression(k);
-                    }                    
-                }
-
-            }
+            return GetAndExpression(k, GetComparerOperatorExpression);
         }
-
-        //not takes precedence over comparer operators so "not a eq b" is the same as "(not a) eq b"
-        private IEvaluableExpression GetNotExpression(string k)
-        {
-            if (tokensContainer.IsValueAnEvaluableExpression(k))
-            {
-                return tokensContainer.GetExpression(k);
-            }
-            else
-            {
-                string token = tokensContainer.GetToken(k);
-                if (token.Contains("|not|"))
-                {
-                    string ka = token.Replace("|not|", "");
-                    return new ExpressionTree(this.Semantic.NOT, GetComparerOperatorExpression(ka));                    
-                }
-                else
-                {
-                    Token kw = new Token(token);
-                    this.tokens.Add(kw);
-                    return kw;
-                }
-            }
-        }
-
+        
         /// <summary>
         /// opToken -> |eq|, |ne|, etc.
         /// </summary>

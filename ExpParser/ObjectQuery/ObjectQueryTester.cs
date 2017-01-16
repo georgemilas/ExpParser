@@ -42,8 +42,8 @@ namespace ExpParser.ObjectQuery
         {
             bool res;
 
-            string f3 = "Feet * 12 + Inches <= HeightLimit and (Sedation = null or Sedation = true)";
-            res = Evaluate(f3, new Provider2() { HeightLimit = 100, Feet = 5, Inches = 9 });                   //false
+            //string f3 = "Feet * 12 + Inches <= HeightLimit and (Sedation = null or Sedation = true)";
+            //res = Evaluate(f3, new Provider2() { HeightLimit = 100, Feet = 5, Inches = 9 });                   //false
 
 
             string f1 = "(Age >= 12 and Gender = Male) or Gender != Male";
