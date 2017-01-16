@@ -1,4 +1,3 @@
-using ExpParser.keywords;
 using ExtParser.Extensions;
 using System;
 using System.Collections.Generic;
@@ -6,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace ExpParser.arithmetic
 {
-    public class ArithmeticExpressionParser : BaseParser
+    public class ArithmeticExpressionParser : ExpBaseParser
     {
         public new IArithmeticSemantic Semantic
         {

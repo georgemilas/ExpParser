@@ -1,12 +1,11 @@
 using ExtParser.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
-namespace ExpParser.keywords.TextSearch
+namespace ExpParser.BooleanLogic.TextSearch
 {
-    public class TextSearchSemantic: KeywordsSemantic
+    public class TextSearchSemantic: BooleanLogicSemantic
     {
         public TextSearchSemantic()
         {

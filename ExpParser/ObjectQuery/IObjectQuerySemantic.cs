@@ -1,11 +1,9 @@
-using ExpParser.keywords;
-using System.Linq;
-using System.Reflection;
-using System.Text;
+using System;
+using ExpParser.BooleanLogic;
 
 namespace ExpParser.ObjectQuery
 {
-    public interface IObjectQuerySemantic : IKeywordsSemantic
+    public interface IObjectQuerySemantic : IBooleanLogicSemantic
     {
         IOperator EQ {get; set;}   //equal              ==
         IOperator NE { get; set;}  //not equal          !=

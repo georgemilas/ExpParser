@@ -1,27 +1,27 @@
 using ExpParser.Exceptions;
-using ExtParser.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace ExpParser.keywords.SQL
+namespace ExpParser.BooleanLogic.SQL
 {
-    public class SqlAND : SQLOperator, IOperator
+    public class SqlNOT : SQLOperator, IOperator
     {
         //obj is always null, as we are not really evaluating anything but transforming the keywords text into a SQL WHERE clause as string
-        public object Evaluate(object obj, IEvaluableExpression exp) { throw new EvaluationException("IOperator._AND -> cannot evaluate one element, needs a list of elements"); }
+        public object Evaluate(object obj, IEvaluableExpression exp)
+        {
+            return string.Format("NOT ({0})", exp.Evaluate(null));
+        }
         public object Evaluate(object obj, List<IEvaluableExpression> exps)
         {
-            return EvaluateAndJoin(" AND ", exps);
+            throw new EvaluationException("IOperator._NOT -> cannot negate a list");
         }
         public string ToString(IEvaluableExpression exp)
         {
-            return exp.ToString();
+            return "NOT " + exp.ToString();
         }
         public string ToString(List<IEvaluableExpression> exps)
         {
-            return "(" + exps.Join(" AND ") + ")";
+            throw new EvaluationException("IOperator._NOT -> cannot negate a list");
         }
-
     }
 }

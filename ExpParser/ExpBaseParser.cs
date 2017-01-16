@@ -5,14 +5,14 @@ using ExpParser.Exceptions;
 
 namespace ExpParser
 {
-    public abstract class BaseParser : IEvaluableExpression
+    public abstract class ExpBaseParser : IEvaluableExpression
     {
         public string StringToBeParsed { get; set; }
 
         protected TokensContainer tokensContainer;  //state helper
         private IEvaluableExpression _expression;
         
-        public BaseParser(string expressionToBeParsed, ISemantic semantic)
+        public ExpBaseParser(string expressionToBeParsed, ISemantic semantic)
         {
             this.StringToBeParsed = expressionToBeParsed;
             this._expression = null;
@@ -84,49 +84,6 @@ namespace ExpParser
                 }
             }
             return exp;
-        }
-
-
-        /// <summary>
-        /// Tokenize expressions between quotes 
-        /// </summary>
-        /// <returns></returns>
-        protected string QuotedStrings(string expressionToBeParsed)
-        {
-            return QuotedStrings(expressionToBeParsed, '"', '\\');
-        }
-        protected string QuotedStrings(string expressionToBeParsed, char quote, char quoteEscape)
-        {
-            string keys = expressionToBeParsed;
-
-            //reduce expressions between quotes to some unique token that we can more easily work with
-            int idx = keys.IndexOf(quote);
-            while (idx >= 0)
-            {
-                int seekFrom = idx + 1;
-                int idx2 = keys.Slice(seekFrom).IndexOf(quote);
-
-                while (idx2 >= 0 && keys[seekFrom + idx2 - 1] == quoteEscape && !(idx2 == keys.Length - 1))
-                {
-                    //escape for " is \" unless is the last char
-                    seekFrom = seekFrom + idx2 + 1 + 1;
-                    idx2 = keys.Slice(seekFrom).IndexOf(quote);
-                }
-                if (idx2 >= 0)
-                {
-                    string token = keys.Slice(idx, seekFrom + idx2 + 1);
-                    string hs = tokensContainer.GetTokenHash(token);
-                    tokensContainer.AddToken("token#" + hs, token.Slice(1, -1).Replace(quoteEscape.ToString()+quote.ToString(), quote.ToString()));    //strip out enclosing quote symbol and un-escape quotes
-                    keys = keys.Replace(token, "token#" + hs);
-                    idx = keys.IndexOf(quote);
-                }
-                else
-                {
-                    break;
-                }
-            }
-            
-            return keys;
         }
 
 

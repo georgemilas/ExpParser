@@ -1,4 +1,5 @@
-﻿using ExpParser.Exceptions;
+﻿using System;
+using ExpParser.Exceptions;
 
 namespace ExpParser.arithmetic
 {

@@ -1,4 +1,5 @@
-using ExpParser.keywords.TextSearch;
+using System;
+using ExpParser.BooleanLogic.TextSearch;
 
 namespace ExpParser.ObjectQuery
 {

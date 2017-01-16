@@ -1,4 +1,3 @@
-using ExpParser.ObjectQuery;
 using System;
 
 namespace ExpParser.ObjectQuery

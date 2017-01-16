@@ -1,9 +1,8 @@
 using ExpParser.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace ExpParser.keywords.TextSearch
+namespace ExpParser.BooleanLogic.TextSearch
 {
     public class SearchNOT : IOperator
     {

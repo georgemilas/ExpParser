@@ -1,8 +1,9 @@
-using ExpParser.keywords;
+using System;
+using ExpParser.BooleanLogic;
 
 namespace ExpParser.ObjectQuery
 {
-    public abstract class ObjectQuerySemantic : KeywordsSemantic, IObjectQuerySemantic
+    public abstract class ObjectQuerySemantic : BooleanLogicSemantic, IObjectQuerySemantic
     {
         public IOperator EQ { get; set; }
         public IOperator NE { get; set; }

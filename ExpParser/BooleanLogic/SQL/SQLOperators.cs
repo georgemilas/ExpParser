@@ -1,9 +1,8 @@
 using ExtParser.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace ExpParser.keywords.SQL
+namespace ExpParser.BooleanLogic.SQL
 {
     public class SQLOperator
     {

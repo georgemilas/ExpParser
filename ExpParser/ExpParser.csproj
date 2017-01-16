@@ -40,17 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="arithmetic\ArithmeticSemantic.cs" />
-    <Compile Include="arithmetic\Division.cs" />
-    <Compile Include="arithmetic\IArithmeticSemantic.cs" />
-    <Compile Include="arithmetic\ArithmeticExpressionParser.cs" />
-    <Compile Include="arithmetic\ArithmenticTester.cs" />
-    <Compile Include="arithmetic\ArithmeticOperator.cs" />
-    <Compile Include="arithmetic\Minus.cs" />
-    <Compile Include="arithmetic\Multiply.cs" />
-    <Compile Include="arithmetic\Plus.cs" />
-    <Compile Include="arithmetic\Pow.cs" />
-    <Compile Include="BaseParser.cs" />
+    <Compile Include="Arithmetic\ArithmeticSemantic.cs" />
+    <Compile Include="Arithmetic\Division.cs" />
+    <Compile Include="Arithmetic\IArithmeticSemantic.cs" />
+    <Compile Include="Arithmetic\ArithmeticExpressionParser.cs" />
+    <Compile Include="Arithmetic\ArithmenticTester.cs" />
+    <Compile Include="Arithmetic\ArithmeticOperator.cs" />
+    <Compile Include="Arithmetic\Minus.cs" />
+    <Compile Include="Arithmetic\Multiply.cs" />
+    <Compile Include="Arithmetic\Plus.cs" />
+    <Compile Include="Arithmetic\Pow.cs" />
+    <Compile Include="ExpBaseParser.cs" />
+    <Compile Include="BooleanLogic\KeywordsExpressionParser.cs" />
     <Compile Include="exception\EvaluationException.cs" />
     <Compile Include="exception\ParsingException.cs" />
     <Compile Include="ExpressionTree.cs" />
@@ -60,20 +61,20 @@
     <Compile Include="IEvaluableExpression.cs" />
     <Compile Include="IOperator.cs" />
     <Compile Include="ISemantic.cs" />
-    <Compile Include="keywords\IKeywordsSemantic.cs" />
-    <Compile Include="keywords\KeywordsExpressionParser.cs" />
-    <Compile Include="keywords\KeywordsSemantic.cs" />
-    <Compile Include="keywords\KeywordsTester.cs" />
-    <Compile Include="keywords\SQL\SqlAND.cs" />
-    <Compile Include="keywords\SQL\SqlNOT.cs" />
-    <Compile Include="keywords\SQL\SQLOperators.cs" />
-    <Compile Include="keywords\SQL\SqlOR.cs" />
-    <Compile Include="keywords\SQL\SQLSemantic.cs" />
-    <Compile Include="keywords\SQL\SqlTokenEvaluator.cs" />
-    <Compile Include="keywords\TextSearch\SearchAND.cs" />
-    <Compile Include="keywords\TextSearch\SearchNOT.cs" />
-    <Compile Include="keywords\TextSearch\SearchOR.cs" />
-    <Compile Include="keywords\TextSearch\TextSearchSemantic.cs" />
+    <Compile Include="BooleanLogic\IBooleanLogicSemantic.cs" />
+    <Compile Include="BooleanLogic\BooleanLogicExpressionParser.cs" />
+    <Compile Include="BooleanLogic\BooleanLogicSemantic.cs" />
+    <Compile Include="BooleanLogic\KeywordsTester.cs" />
+    <Compile Include="BooleanLogic\SQL\SqlAND.cs" />
+    <Compile Include="BooleanLogic\SQL\SqlNOT.cs" />
+    <Compile Include="BooleanLogic\SQL\SQLOperators.cs" />
+    <Compile Include="BooleanLogic\SQL\SqlOR.cs" />
+    <Compile Include="BooleanLogic\SQL\SQLSemantic.cs" />
+    <Compile Include="BooleanLogic\SQL\SqlTokenEvaluator.cs" />
+    <Compile Include="BooleanLogic\TextSearch\SearchAND.cs" />
+    <Compile Include="BooleanLogic\TextSearch\SearchNOT.cs" />
+    <Compile Include="BooleanLogic\TextSearch\SearchOR.cs" />
+    <Compile Include="BooleanLogic\TextSearch\TextSearchSemantic.cs" />
     <Compile Include="ObjectQuery\IObjectQuerySemantic.cs" />
     <Compile Include="ObjectQuery\LiteralToken.cs" />
     <Compile Include="ObjectQuery\ObjectComparerOperator.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="TokensContainer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="keywords\Usage.txt" />
+    <Content Include="BooleanLogic\Usage.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

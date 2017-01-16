@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace ExpParser.keywords
+namespace ExpParser.BooleanLogic
 {
-    public abstract class KeywordsSemantic: IKeywordsSemantic
+    public abstract class BooleanLogicSemantic: IBooleanLogicSemantic
     {
         public IOperator AND { get; set; }
         public IOperator OR { get; set; }

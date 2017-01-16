@@ -1,11 +1,12 @@
-using ExpParser.keywords;
+using System;
+using ExpParser.BooleanLogic;
 using ExtParser.Extensions;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace ExpParser.ObjectQuery
 {
-    public class ObjectQueryExpressionParser : KeywordsExpressionParser
+    public class ObjectQueryExpressionParser : BooleanLogicExpressionParser
     {
         public ObjectQueryExpressionParser(string apiQueryExpression, ObjectQuerySemantic semantic): base(apiQueryExpression, semantic) { }
 
