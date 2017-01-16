@@ -1,7 +1,7 @@
 ﻿using System;
 using ExpParser.Exceptions;
 
-namespace ExpParser.arithmetic
+namespace ExpParser.Arithmetic
 {
     public class ArithmenticSemantic : IArithmeticSemantic
     {

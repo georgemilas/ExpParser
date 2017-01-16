@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace ExpParser.arithmetic
+namespace ExpParser.Arithmetic
 {
     public class ArithmeticExpressionParser : ExpBaseParser
     {

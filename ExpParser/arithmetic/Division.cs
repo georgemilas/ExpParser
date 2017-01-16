@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ExpParser.arithmetic
+namespace ExpParser.Arithmetic
 {
     public class Division : ArithmeticOperator
     {

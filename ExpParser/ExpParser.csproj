@@ -44,7 +44,6 @@
     <Compile Include="Arithmetic\Division.cs" />
     <Compile Include="Arithmetic\IArithmeticSemantic.cs" />
     <Compile Include="Arithmetic\ArithmeticExpressionParser.cs" />
-    <Compile Include="Arithmetic\ArithmenticTester.cs" />
     <Compile Include="Arithmetic\ArithmeticOperator.cs" />
     <Compile Include="Arithmetic\Minus.cs" />
     <Compile Include="Arithmetic\Multiply.cs" />
@@ -52,19 +51,18 @@
     <Compile Include="Arithmetic\Pow.cs" />
     <Compile Include="ExpBaseParser.cs" />
     <Compile Include="BooleanLogic\KeywordsExpressionParser.cs" />
-    <Compile Include="exception\EvaluationException.cs" />
-    <Compile Include="exception\ParsingException.cs" />
+    <Compile Include="Exceptions\EvaluationException.cs" />
+    <Compile Include="Exceptions\ParsingException.cs" />
     <Compile Include="ExpressionTree.cs" />
-    <Compile Include="extensions\CSV.cs" />
-    <Compile Include="extensions\ListExtensions.cs" />
-    <Compile Include="extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\CSV.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="IEvaluableExpression.cs" />
     <Compile Include="IOperator.cs" />
     <Compile Include="ISemantic.cs" />
     <Compile Include="BooleanLogic\IBooleanLogicSemantic.cs" />
     <Compile Include="BooleanLogic\BooleanLogicExpressionParser.cs" />
     <Compile Include="BooleanLogic\BooleanLogicSemantic.cs" />
-    <Compile Include="BooleanLogic\KeywordsTester.cs" />
     <Compile Include="BooleanLogic\SQL\SqlAND.cs" />
     <Compile Include="BooleanLogic\SQL\SqlNOT.cs" />
     <Compile Include="BooleanLogic\SQL\SQLOperators.cs" />
@@ -81,7 +79,6 @@
     <Compile Include="ObjectQuery\ObjectEvaluatorSemantic.cs" />
     <Compile Include="ObjectQuery\ObjectQueryExpressionParser.cs" />
     <Compile Include="ObjectQuery\ObjectQuerySemantic.cs" />
-    <Compile Include="ObjectQuery\ObjectQueryTester.cs" />
     <Compile Include="ObjectQuery\ComparerOperatorExpression.cs" />
     <Compile Include="ObjectQuery\PropertyToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,7 +86,7 @@
     <Compile Include="TokensContainer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BooleanLogic\Usage.txt" />
+    <Content Include="BooleanLogic\KeywordsExpressionParser_Usage.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

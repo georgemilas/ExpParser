@@ -1,6 +1,6 @@
 using System;
 
-namespace ExpParser.arithmetic
+namespace ExpParser.Arithmetic
 {
     public interface IArithmeticSemantic : ISemantic
     {

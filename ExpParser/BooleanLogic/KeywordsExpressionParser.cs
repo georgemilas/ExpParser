@@ -19,6 +19,7 @@ namespace ExpParser.BooleanLogic
     public class KeywordsExpressionParser : BooleanLogicExpressionParser
     {
         public KeywordsExpressionParser(string keywordsExpressionString) : base(keywordsExpressionString, new TextSearch.TextSearchSemantic()) { }
+        public KeywordsExpressionParser(string keywordsExpressionString, IBooleanLogicSemantic semantic) : base(keywordsExpressionString, semantic) { }
 
         private string CurlyBracesTokenHandler(string token, string tokenHash)
         {
