@@ -29,22 +29,22 @@ namespace ExtParser.Extensions
         public static string ToCsvLine(IEnumerable e, string separator, bool quoteStrings) { return ToCsvLine(e, separator, null, quoteStrings); }
 
         /// <summary>
-        /// if getStrDel is given will use that to stringify each object in the list otherwise if getStrDel is not given then will just use object's ToString() method
+        /// if getStr is given will use that to stringify each object in the list otherwise if getStr is not given then will just use object's ToString() method
         /// </summary>
-        public static string ToCsvLine(IEnumerable e, string separator, GetStringDelegate getStrDel) { return ToCsvLine(e, separator, getStrDel, false); }
+        public static string ToCsvLine(IEnumerable e, string separator, Func<object, string> getStr) { return ToCsvLine(e, separator, getStr, false); }
         /// <summary>
         /// if getStrDel is given will use that to stringify each object in the list otherwise if getStrDel is not given then will just use object's ToString() method
         /// </summary>
-        public static string ToCsvLine(IEnumerable e, string separator, GetStringDelegate getStrDel, bool quoteStrings)
+        public static string ToCsvLine(IEnumerable e, string separator, Func<object, string> getStr, bool quoteStrings)
         {
             if (separator == null) { separator = ","; }
             StringBuilder bres = new StringBuilder("");
             foreach (Object s in e)
             {
                 string ss;
-                if (getStrDel != null) 
+                if (getStr != null) 
                 { 
-                    ss = getStrDel(s); 
+                    ss = getStr(s); 
                 }
                 else 
                 {
@@ -72,9 +72,9 @@ namespace ExtParser.Extensions
             return res;
         }
 
-        public static string ToCsvLine(Object e, GetStringDelegate getStrDel)
+        public static string ToCsvLine(Object e, Func<object, string> getStr)
         {
-            return getStrDel(e);
+            return getStr(e);
         }
 
         
@@ -91,40 +91,40 @@ namespace ExtParser.Extensions
         /// <summary>
         /// if getStrDel is given will use that to stringify each object in the list of lists otherwise if getStrDel is not given then will just use object's ToString() method
         /// </summary>
-        public static string ToCsv(IEnumerable<IEnumerable> e, string separator, GetStringDelegate getStrDel) { return ToCsv(e, separator, getStrDel, false); }
+        public static string ToCsv(IEnumerable<IEnumerable> e, string separator, Func<object, string> getStr) { return ToCsv(e, separator, getStr, false); }
         /// <summary>
         /// if getStrDel is given will use that to stringify each object in the list of lists otherwise if getStrDel is not given then will just use object's ToString() method
         /// </summary>
-        public static string ToCsv(IEnumerable<IEnumerable> e, string separator, GetStringDelegate getStrDel, bool quoteStrings)
+        public static string ToCsv(IEnumerable<IEnumerable> e, string separator, Func<object, string> getStr, bool quoteStrings)
         {
             StringBuilder sb = new StringBuilder();
             foreach (IEnumerable le in e)
             {
-                sb.AppendLine(CSV.ToCsvLine(le, separator, getStrDel, quoteStrings));
+                sb.AppendLine(CSV.ToCsvLine(le, separator, getStr, quoteStrings));
             }
             return sb.ToString();
 
             
         }
 
-        public static string ToCsv(IEnumerable e, GetStringDelegate getStrDel)
+        public static string ToCsv(IEnumerable e, Func<object, string> getStr)
         {
             StringBuilder sb = new StringBuilder();
             foreach (Object le in e)
             {
-                sb.AppendLine(CSV.ToCsvLine(le, getStrDel));
+                sb.AppendLine(CSV.ToCsvLine(le, getStr));
             }
             return sb.ToString();
         }
 
-        public static string CalendarAppointmentstoCsv(IEnumerable e, GetStringDelegate getStrDel)
+        public static string CalendarAppointmentstoCsv(IEnumerable e, Func<object, string> getStr)
         {
             StringBuilder sb = new StringBuilder();
             //add the standard calender header line
             sb.AppendLine(string.Format("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\",\"{12}\",\"{13}\",\"{14}\",\"{15}\",\"{16}\",\"{17}\",\"{18}\",\"{19}\",\"{20}\",\"{21}\"","Subject","Start Date","Start Time","End Date","End Time","All day event","Reminder on/off","Reminder Date","Reminder Time","Meeting Organizer","Required Attendees","Optional Attendees","Meeting Resources","Billing Information","Categories","Description","Location","Mileage","Priority","Private","Sensitivity","Show time as"));
             foreach (Object le in e)
             {
-                sb.AppendLine(CSV.ToCsvLine(le, getStrDel));
+                sb.AppendLine(CSV.ToCsvLine(le, getStr));
             }
             return sb.ToString();
         }

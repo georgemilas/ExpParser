@@ -107,6 +107,7 @@ namespace ExtParser.Extensions
 
 
         /// <summary>
+        /// - Split the elements of the list in lists of #nr elements
         /// - [1,2,3,4,5,6,7,8,9,10].Unzip(3) -> [(1,2,3),(4,5,6),(7,8,9), (10,)]
         /// </summary>
         public static List<List<T>> Unzip<T>(this IEnumerable<T> lst, int nr)
@@ -134,6 +135,7 @@ namespace ExtParser.Extensions
         }
 
         /// <summary>
+        /// Evenly split the elements in #nr lists
         /// - [1,2,3,4,5,6,7,8,9,10].Split(3) -> [(1,2,3),(4,5,6),(7,8,9,10)]
         /// </summary>
         public static List<List<T>> Split<T>(this IEnumerable<T> lst, int nr)
@@ -143,9 +145,7 @@ namespace ExtParser.Extensions
             List<List<T>> mainlst = new List<List<T>>();
             foreach (T itm in lst)
             {
-                if (res.Count < lists || 
-                    (res.Count >= lists && mainlst.Count >= lists)
-                   )
+                if ( res.Count < lists || (res.Count >= lists && (mainlst.Count >= lists-1)))
                 {
                     res.Add(itm);
                 }
@@ -203,25 +203,6 @@ namespace ExtParser.Extensions
             return Slice(lst, idxFrom, null);
         }
         
-        //public static void testSlice()
-        //{
-        //    var lst = new List<int>() { 1, 2, 3, 4, 5, 6, 7 };
-        //    var res = lst.Slice(3, null); //=> [4,5,6,7]
-        //    res = lst.Slice(-3, null); // => [5,6,7]
-        //    res = lst.Slice(20, null);// => []
-        //    res = lst.Slice(-20, null);// => [1,2,3,4,5,6,7]
-
-        //    res = lst.Slice(null, 3);// => [1,2,3]
-        //    res = lst.Slice(null, -3);// => [1,2,3,4]
-        //    res = lst.Slice(null, 20);// => [1,2,3,4,5,6,7]
-        //    res = lst.Slice(null, -20);// => []
-
-        //    res = lst.Slice(3, 4);// => [4]
-        //    res = lst.Slice(-3, -1);// => [5,6]
-        //    res = lst.Slice(-3, -4);// => []
-        //    res = lst.Slice(3, 20);// => [4,5,6,7]
-        //}
-
         /// <summary>
         /// - like the slice operator in python
         /// - lst = [1,2,3,4,5,6,7]

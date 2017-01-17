@@ -51,6 +51,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ArithmenticTester.cs" />
+    <Compile Include="CSVTester.cs" />
+    <Compile Include="ListExtensionsTester.cs" />
     <Compile Include="KeywordsTester.cs" />
     <Compile Include="ObjectQueryTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
