@@ -1,3 +1,4 @@
+using ExpParser.Exceptions;
 using ExtParser.Extensions;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,10 @@ namespace ExpParser.BooleanLogic
         /// <returns></returns>
         protected virtual IEvaluableExpression GetOrExpression(string kexp)
         {
+            if (String.IsNullOrEmpty(kexp))
+            {
+                throw new ParsingException("Expression to parse must not be null or empty");
+            }
             List<string> orList = kexp.SplitClean("|or|");
             List<IEvaluableExpression> ors = new List<IEvaluableExpression>();
             IEvaluableExpression exp = null;

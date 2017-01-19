@@ -3,3 +3,7 @@
 ################################################################################
 
 /ExpParser/bin/Debug
+/ExpParser/obj/Debug
+/ExpParserTests/bin/Debug
+/ExpParserTests/obj/Debug
+/packages/NUnit.3.6.0

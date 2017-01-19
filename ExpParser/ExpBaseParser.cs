@@ -94,6 +94,11 @@ namespace ExpParser
         protected virtual string ParenthesesTokenHandler(string token, string tokenHash)
         {
             //strip out '(' and ')' and recursively Parse sub Expression (sub parentheses)
+            var subexp = token.Slice(1, -1);
+            if (subexp == "")
+            {
+                throw new ParsingException("Empty parentheses expression () is not supported");
+            }
             IEvaluableExpression tval = Parse(token.Slice(1, -1));
             tokensContainer.AddEvaluableExpression("token#" + tokenHash, tval);
             return "token#" + tokenHash.ToString();

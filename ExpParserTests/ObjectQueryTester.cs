@@ -1,3 +1,4 @@
+using ExpParser.Exceptions;
 using ExpParser.ObjectQuery;
 using NUnit.Framework;
 using System;
@@ -63,5 +64,21 @@ namespace ExpParser.Tests.ObjectQuery
             Assert.AreEqual(true, Evaluate(kw, new TT() { Rate = 0, Type = "$" }));         //true
                              
         }
+
+        [Test]
+        public void TestObjectEvaluation_EvaluationErrors()
+        {
+            Assert.Throws<EvaluationException>(() => Evaluate("Bogus >= 12", new Provider()), "Property Bogus was not found");  
+            Assert.Throws<EvaluationException>(() => Evaluate("Age >= blablabla", new Provider() { Age = 25}), "Input string was not in a correct format, expected Int32 but found blablabla");
+
+        }
+
+        [Test]
+        public void TestObjectEvaluation_ParsingErrors()
+        {
+            Assert.Throws<ParsingException>(() => Evaluate("Age >= new Provider()", new Provider() { Age = 25 }), "Empty parentheses expression () is not supported");
+        }
+
+
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using ExpParser.Exceptions;
+using System.Text.RegularExpressions;
+using ExtParser.Extensions;
 
 namespace ExpParser.Arithmetic
 {
@@ -36,6 +38,11 @@ namespace ExpParser.Arithmetic
                             double d;
                             if (!double.TryParse(token, out d))
                             {
+                                var decr = new Regex(@"\d+(\.\d+)?m", RegexOptions.IgnoreCase);   //3m, 3M, 3.3m
+                                if (decr.IsMatch(token))
+                                {
+                                    token = token.Slice(0,-1);
+                                }
                                 decimal m;
                                 if (!decimal.TryParse(token, out m))
                                 {
