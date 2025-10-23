@@ -6,7 +6,7 @@ This is a C# library that I have used (with similar implementations) for various
 It supports arithmetic and boolean logic type queries, combined with regular expressions, in a single query.
  
 
-Here are a couple of examples:
+Here are a couple of examples one could type into a search bar or submit to an API layer to have fine control over the received data from the API:
   * arithmetic and boolean 
       * (Age >= 12 and Gender = Male) or Gender != Male
       * Weight <= 300 and (Sedation = null or Sedation = true)
