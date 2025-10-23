@@ -19,7 +19,7 @@ Here are a couple of examples:
         </pre> 
         "(((fld_name LIKE '%tag%') OR (fld_name LIKE '%echo%')) AND NOT (((fld_name LIKE '%jim%') OR (fld_name LIKE '%fred%'))))"
 
-
+<pre />
 Additional syntax deconstruction:
   * space(s) is an OR, & is an AND, ! is a NOT
   * "k1 k2" same as "k1 or k2" 
