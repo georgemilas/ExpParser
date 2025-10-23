@@ -24,5 +24,7 @@ Additional syntax deconstruction:
   * space(s) is an OR, & is an AND, ! is a NOT
   * "k1 k2" same as "k1 or k2" 
   * "k1 k2 & !k3" same as "k1 or (k2 and not k3)"
-  * precedence table in descending order: not and or
+  * k1 (k2 & {k3}) == k1 or (k2 and {k3}) where k3 may be a regular Expression
+  * use quotes for literals, for example, 'name = "Gheorghe Milas" and sex = Male' 
+  * precedence table in descending order: {exp} "exp" ! and or
     
