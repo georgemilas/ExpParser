@@ -198,9 +198,9 @@ namespace ExtParser.Extensions
         /// <summary>
         /// - see slice(ixFrom, null)
         /// </summary>
-        public static List<T> Slice<T>(this IEnumerable<T> lst, int idxFrom) 
+        public static List<T> SliceEx<T>(this IEnumerable<T> lst, int idxFrom) 
         {
-            return Slice(lst, idxFrom, null);
+            return SliceEx(lst, idxFrom, null);
         }
         
         /// <summary>
@@ -221,7 +221,7 @@ namespace ExtParser.Extensions
         ///     lst.Slice(-3, -4) => []
         ///     lst.Slice(3, 20) => [4,5,6,7]
         /// </summary>
-        public static List<T> Slice<T>(this IEnumerable<T> lst, int? idxFrom, int? idxTo)
+        public static List<T> SliceEx<T>(this IEnumerable<T> lst, int? idxFrom, int? idxTo)
         {
             var lcnt = lst.Count();
 

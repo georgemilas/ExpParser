@@ -13,7 +13,7 @@ namespace ExtParser.Extensions
         public static string Slice(this string txt, int idxFrom)
         {
             List<char> lst = new List<char>(txt.ToCharArray());
-            List<char> res = lst.Slice(idxFrom);
+            List<char> res = lst.SliceEx(idxFrom);
             return res.Join("");
         }
 
@@ -23,7 +23,7 @@ namespace ExtParser.Extensions
         public static string Slice(this string txt, int? idxFrom, int? idxTo)
         {
             List<char> lst = new List<char>(txt.ToCharArray());
-            List<char> res = lst.Slice(idxFrom, idxTo);
+            List<char> res = lst.SliceEx(idxFrom, idxTo);
             return res.Join("");
         }
 

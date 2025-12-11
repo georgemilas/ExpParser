@@ -29,8 +29,8 @@ namespace ExpParser.Arithmetic
             double startAcum = this.Acum;
             if (OP == "/" || OP == "^" || OP == "-")
             {
-                startAcum = Convert.ToDouble(evaled.First());
-                evaled = evaled.Slice(1);
+                startAcum = Convert.ToDouble(evaled.First());  //acumulator is double so every result will be double
+                evaled = evaled.SliceEx(1);
             }
             return evaled.Reduce((el, acum) =>
             {

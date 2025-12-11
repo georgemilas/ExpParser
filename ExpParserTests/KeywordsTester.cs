@@ -1,33 +1,32 @@
 using System;
 using ExpParser.BooleanLogic.SQL;
 using ExpParser.BooleanLogic;
-using NUnit.Framework;
+using Xunit;
 
 namespace ExpParser.Tests.BooleanLogic
 {
-    [TestFixture]
-    class KeywordsTester
+    public class KeywordsTester
     {
         /// <summary>
-        /// (george and ((maria and andrew) or \"paul milas\"))   mona eugen \"milas family\"
+        /// (george and ((maria and andrew) or "paul milas"))   mona eugen "milas family"
         /// </summary>
-        [Test]
+        [Fact]
         public void Test_KeywordsExpressionParser_eval1()
         {
             string kw = "(george and ((maria and andrew) or \"paul milas\"))   mona eugen \"milas family\"";
 
             ExpBaseParser parser = new KeywordsExpressionParser(kw);
 
-            Assert.AreEqual(false, (bool)parser.Evaluate("paul milas and andrew are going to see a movie"));
-            Assert.AreEqual(true, (bool)parser.Evaluate("\"paul milas\" and george are going to see a movie"));
-            Assert.AreEqual(false, (bool)parser.Evaluate("paul and george milas are going to see a movie"));
-            Assert.AreEqual(true, (bool)parser.Evaluate("george, maria, andrew and mona are going to see a movie"));
+            Assert.False((bool)parser.Evaluate("paul milas and andrew are going to see a movie"));
+            Assert.True((bool)parser.Evaluate("\"paul milas\" and george are going to see a movie"));
+            Assert.False((bool)parser.Evaluate("paul and george milas are going to see a movie"));
+            Assert.True((bool)parser.Evaluate("george, maria, andrew and mona are going to see a movie"));
         }
 
         /// <summary>
-        /// (george and ((maria and andrew) or \"paul milas\"))   mona eugen \"milas family\"
+        /// (george and ((maria and andrew) or "paul milas"))   mona eugen "milas family"
         /// </summary>
-        [Test]
+        [Fact]
         public void Test_KeywordsExpressionParser_SQL1()
         {
             string kw = "(george and ((maria and andrew) or \"paul milas\"))   mona eugen \"milas family\"";
@@ -36,31 +35,31 @@ namespace ExpParser.Tests.BooleanLogic
             string res = (string)parser.Evaluate(null);
             string mustBe = "(((name='george') AND (((name='maria') AND (name='andrew')) OR (name='paul milas'))) OR (name='mona') OR (name='eugen') OR (name='milas family'))";
 
-            Assert.AreEqual(mustBe, res);
+            Assert.Equal(mustBe, res);
         }
 
 
         
 
         /// <summary>
-        /// (george {\"paul milas\"}) & !{\\d}
+        /// (george {"paul milas"}) & !{\d}
         /// </summary>
-        [Test]        
+        [Fact]        
         public void Test_KeywordsExpressionParser_eval2()
         {
             string kw = "(george {\"paul milas\"}) & !{\\d}";
 
             var parser = new KeywordsExpressionParser(kw);
-            Assert.AreEqual(false, (bool)parser.Evaluate("gheorghe"));
-            Assert.AreEqual(true, (bool)parser.Evaluate("george"));
-            Assert.AreEqual(false, (bool)parser.Evaluate("george 123"));            
+            Assert.False((bool)parser.Evaluate("gheorghe"));
+            Assert.True((bool)parser.Evaluate("george"));
+            Assert.False((bool)parser.Evaluate("george 123"));            
 
         }
 
         /// <summary>
-        /// (george {\"paul milas\"}) & !{\\d}
+        /// (george {"paul milas"}) & !{\d}
         /// </summary>
-        [Test]
+        [Fact]
         public void Test_KeywordsExpressionParser_SQL2()
         {
             string kw = "(george {\"paul milas\"}) & !{\\d}";
@@ -69,7 +68,7 @@ namespace ExpParser.Tests.BooleanLogic
             var res = (string)parser.Evaluate(null);
             var mustBe = "(((name='george') OR (name='{\"paul milas\"}')) AND NOT ((name='{\\d}')))";
             
-            Assert.AreEqual(mustBe, res);
+            Assert.Equal(mustBe, res);
         }
 
 
@@ -82,7 +81,7 @@ namespace ExpParser.Tests.BooleanLogic
         /// <summary>
         /// (maria gheorghe) and not (andrew anthony)
         /// </summary>
-        [Test]
+        [Fact]
         public void Test_BooleanLogicExpressionParser_SQL_like()
         {
             var te = new SQLTokenEvaluator("fld_name", SQLTokenEvaluator.OPERATOR_TYPE.LIKE, SQLTokenEvaluator.FIELD_TYPE.STRING);
@@ -91,7 +90,7 @@ namespace ExpParser.Tests.BooleanLogic
             string where = (string)parser.Evaluate(null);
             var mustBe = "(((fld_name LIKE '%maria%') OR (fld_name LIKE '%gheorghe%')) AND NOT (((fld_name LIKE '%andrew%') OR (fld_name LIKE '%anthony%'))))";
 
-            Assert.AreEqual(mustBe, where);
+            Assert.Equal(mustBe, where);
         }
 
 
