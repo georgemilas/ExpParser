@@ -12,12 +12,12 @@ namespace ExpParser.Tests.Extensions
         [Fact]
         public void TestToCsvLine()
         {
-            var lst = new List<int>() { 1, 2, 3, 4, 5, 6, 7 };
+            var lst = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 };
             var actual = CSV.ToCsvLine(lst);
-            Assert.Equal("1,2,3,4,5,6,7", actual);
+            Assert.Equal("1,2,3,4,5,6,7,8", actual);
 
             actual = CSV.ToCsvLine(lst, true);
-            Assert.Equal("1,2,3,4,5,6,7", actual);
+            Assert.Equal("1,2,3,4,5,6,7,8", actual);
 
             var lst2 = new List<string>() { "a", "b", "c" };
             actual = CSV.ToCsvLine(lst2, true);

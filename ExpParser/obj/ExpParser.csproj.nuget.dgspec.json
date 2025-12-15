@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\TotulAici\\learn_and_code\\oldme\\ExpParser\\ExpParser\\ExpParser.csproj": {}
+    "C:\\TotulAici\\learn_and_code\\ecogallery\\ExpParser\\ExpParser\\ExpParser.csproj": {}
   },
   "projects": {
-    "C:\\TotulAici\\learn_and_code\\oldme\\ExpParser\\ExpParser\\ExpParser.csproj": {
+    "C:\\TotulAici\\learn_and_code\\ecogallery\\ExpParser\\ExpParser\\ExpParser.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\TotulAici\\learn_and_code\\oldme\\ExpParser\\ExpParser\\ExpParser.csproj",
+        "projectUniqueName": "C:\\TotulAici\\learn_and_code\\ecogallery\\ExpParser\\ExpParser\\ExpParser.csproj",
         "projectName": "ExpParser",
-        "projectPath": "C:\\TotulAici\\learn_and_code\\oldme\\ExpParser\\ExpParser\\ExpParser.csproj",
+        "projectPath": "C:\\TotulAici\\learn_and_code\\ecogallery\\ExpParser\\ExpParser\\ExpParser.csproj",
         "packagesPath": "C:\\Users\\gmila\\.nuget\\packages\\",
-        "outputPath": "C:\\TotulAici\\learn_and_code\\oldme\\ExpParser\\ExpParser\\obj\\",
+        "outputPath": "C:\\TotulAici\\learn_and_code\\ecogallery\\ExpParser\\ExpParser\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

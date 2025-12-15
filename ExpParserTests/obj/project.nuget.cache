@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sR9eBL8TxEc=",
+  "dgSpecHash": "Qznl2ol5p44=",
   "success": true,
-  "projectFilePath": "C:\\TotulAici\\learn_and_code\\oldme\\ExpParser\\ExpParserTests\\ExpParserTests.csproj",
+  "projectFilePath": "C:\\TotulAici\\learn_and_code\\ecogallery\\ExpParser\\ExpParserTests\\ExpParserTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\gmila\\.nuget\\packages\\microsoft.codecoverage\\17.11.1\\microsoft.codecoverage.17.11.1.nupkg.sha512",
     "C:\\Users\\gmila\\.nuget\\packages\\microsoft.net.test.sdk\\17.11.1\\microsoft.net.test.sdk.17.11.1.nupkg.sha512",
