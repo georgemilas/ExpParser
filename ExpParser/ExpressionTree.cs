@@ -71,5 +71,12 @@ namespace ExpParser
                 return this.op.ToString(this.exp);
             }
         }
+
+        public bool IsConstant
+        {
+            get { return false; }
+        }
+
+
     }
 }

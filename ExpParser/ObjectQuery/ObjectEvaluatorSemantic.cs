@@ -8,6 +8,7 @@ namespace ExpParser.ObjectQuery
         public ObjectEvaluatorSemantic()
         {
             //this are short-circuit operators evaluators so maybe not everything will be evaluated
+            this.TokenEvaluatorInstance = this;
             this.AND = new SearchAND();
             this.OR = new SearchOR();
             this.NOT = new SearchNOT();
@@ -16,7 +17,11 @@ namespace ExpParser.ObjectQuery
             this.LT = new ObjectComparerOperator("lt"); //, (l, r) => l < r);
             this.GT = new ObjectComparerOperator("gt"); //, (l, r) => l > r);
             this.LE = new ObjectComparerOperator("le"); //, (l, r) => l <= r);
-            this.GE = new ObjectComparerOperator("ge"); //, (l, r) => l >= r);            
-        }       
+            this.GE = new ObjectComparerOperator("ge"); //, (l, r) => l >= r);    
+
+        }
+
+        public override Func<object, string, object> TokenEvaluator { get => (o,t)=> { return t; }; }        
+
     }
 }

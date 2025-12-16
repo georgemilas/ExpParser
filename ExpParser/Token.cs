@@ -4,22 +4,28 @@ using System.Collections.Generic;
 
 namespace ExpParser
 {
+
+    public interface ITokenEvaluator
+    {
+        Func<object, string, object> TokenEvaluator { get; }
+    }   
+
+
     /// <summary>
     /// Evaluate a 'token' by setting a 'TokenEvaluator' function so that TokenEvaluator(token) 
     /// represent the evaluation of Token(k)"
     /// </summary>
 
-    public class Token: IEvaluableExpression
+    public class Token: IEvaluableExpression, ITokenEvaluator
     {
         public string token;
-        public delegate object TokenEvaluatorFunction(object obj, string keyword);
-        public virtual TokenEvaluatorFunction TokenEvaluator { get; set; }
+        public virtual Func<object, string, object> TokenEvaluator { get; set; }
 
         public Token(string token) 
         {
             this.token = token.Trim();
         }
-        public Token(string token, TokenEvaluatorFunction tokenEvaluator) : this(token)
+        public Token(string token, Func<object, string, object> tokenEvaluator) : this(token)
         {
             this.TokenEvaluator = tokenEvaluator;
         }
@@ -35,5 +41,12 @@ namespace ExpParser
         {
             return this.token;
         }
+
+        public bool IsConstant
+        {
+            get { return true; }
+        }
+
+
     }
 }

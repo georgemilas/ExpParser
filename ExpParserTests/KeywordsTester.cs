@@ -94,6 +94,55 @@ namespace ExpParser.Tests.BooleanLogic
         }
 
 
+        /// <summary>
+        /// (maria gheorghe) and not (andrew anthony)   LIKE ANY ARRAY
+        /// </summary>
+        [Fact]
+        public void Test_BooleanLogicExpressionParser_PostgreSQL_ilike_array()
+        {
+            var te = new SQLTokenEvaluator("fld_name", SQLTokenEvaluator.OPERATOR_TYPE.ILIKE_ANY_ARRAY, SQLTokenEvaluator.FIELD_TYPE.STRING);
+            var parser = new BooleanLogicExpressionParser("(maria gheorghe) and not (andrew anthony)", new SQLSemantic(te));
+            string where = (string)parser.Evaluate(null);
+            var mustBe = "((fld_name ILIKE ANY(ARRAY['%maria%','%gheorghe%'])) AND NOT ((fld_name ILIKE ANY(ARRAY['%andrew%','%anthony%']))))";
+
+            Assert.Equal(mustBe, where);
+        }
+
+
+        /// <summary>
+        /// (barcelona and (8024 8004 981)) or (barcelona and phone and (3932 448 5453))  LIKE ANY ARRAY
+        /// </summary>
+        [Fact]
+        public void Test_BooleanLogicExpressionParser_PostgreSQL_ilike_array_complex()
+        {
+            var te = new SQLTokenEvaluator("image_path", SQLTokenEvaluator.OPERATOR_TYPE.ILIKE_ANY_ARRAY, SQLTokenEvaluator.FIELD_TYPE.STRING);
+            string expr = @"(barcelona and (8024 8004 981)) or (barcelona and phone and (3932 448 5453))";
+            var parser = new BooleanLogicExpressionParser(expr, new SQLSemantic(te));
+            string where = (string)parser.Evaluate(null);
+            var mustBe = "(((image_path ILIKE '%barcelona%') AND (image_path ILIKE ANY(ARRAY['%8024%','%8004%','%981%']))) OR ((image_path ILIKE '%barcelona%') AND (image_path ILIKE '%phone%') AND (image_path ILIKE ANY(ARRAY['%3932%','%448%','%5453%']))))";
+            Assert.Equal(mustBe, where);
+        }
+
+
+        /// <summary>
+        /// like complex but more complex LIKE ANY ARRAY
+        /// </summary>
+        [Fact]
+        public void Test_BooleanLogicExpressionParser_PostgreSQL_ilike_array_complex2()
+        {
+            var te = new SQLTokenEvaluator("image_path", SQLTokenEvaluator.OPERATOR_TYPE.ILIKE_ANY_ARRAY, SQLTokenEvaluator.FIELD_TYPE.STRING);
+            string expr = @"(barcelona and (8024 8004 981 939 25-2 883 818 787 781 736 709 717 948 958 933 Pano 733 723 674 676 661 656 650
+                618 607 534 532 462 442 447 378 377 374 368 348 331 337 309 317 301 293 288 268 253 233 200 193 
+                142 114 086 7067 7047 7080 127 184 210 319))
+or (barcelona and phone and (3932 448 flamingo 50745 2321 2336 2412 0329 1648 5429 3520 5453))";
+            expr = System.Text.RegularExpressions.Regex.Replace(expr, @"\s+", " "); //normalize spaces
+            var parser = new BooleanLogicExpressionParser(expr, new SQLSemantic(te));
+            string where = (string)parser.Evaluate(null);
+            var mustBe = "(((image_path ILIKE '%barcelona%') AND (image_path ILIKE ANY(ARRAY['%8024%','%8004%','%981%','%939%','%25-2%','%883%','%818%','%787%','%781%','%736%','%709%','%717%','%948%','%958%','%933%','%pano%','%733%','%723%','%674%','%676%','%661%','%656%','%650%','%618%','%607%','%534%','%532%','%462%','%442%','%447%','%378%','%377%','%374%','%368%','%348%','%331%','%337%','%309%','%317%','%301%','%293%','%288%','%268%','%253%','%233%','%200%','%193%','%142%','%114%','%086%','%7067%','%7047%','%7080%','%127%','%184%','%210%','%319%']))) OR ((image_path ILIKE '%barcelona%') AND (image_path ILIKE '%phone%') AND (image_path ILIKE ANY(ARRAY['%3932%','%448%','%flamingo%','%50745%','%2321%','%2336%','%2412%','%0329%','%1648%','%5429%','%3520%','%5453%']))))";
+            Assert.Equal(mustBe, where);
+        }
+
+
     }
 
 

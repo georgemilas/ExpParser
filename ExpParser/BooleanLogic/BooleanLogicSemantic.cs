@@ -9,6 +9,10 @@ namespace ExpParser.BooleanLogic
         public IOperator OR { get; set; }
         public IOperator NOT { get; set; }
 
-        public Token.TokenEvaluatorFunction TokenEvaluator { get; set; }
+        public ITokenEvaluator TokenEvaluatorInstance { get; set; }
+        public virtual Func<object, string, object> TokenEvaluator 
+        { 
+            get { return TokenEvaluatorInstance.TokenEvaluator; }             
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace ExpParser
         /// Evaluate the current Expression tree against the given text
         /// </summary>
         object Evaluate(object obj);   
+        bool IsConstant { get;  }        
     }
 }

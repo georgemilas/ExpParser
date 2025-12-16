@@ -184,6 +184,11 @@ namespace ExpParser
             return kw;
         }
 
+        public bool IsConstant
+        {
+            get { return false; }
+        }
+
 
     }
 

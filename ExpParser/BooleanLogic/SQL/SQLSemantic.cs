@@ -7,10 +7,10 @@ namespace ExpParser.BooleanLogic.SQL
     {
         public SQLSemantic(SQLTokenEvaluator tokenEvaluator)
         {
-            this.AND = new SqlAND();
-            this.OR = new SqlOR();
-            this.NOT = new SqlNOT();
-            this.TokenEvaluator = tokenEvaluator.Evaluator;
+            this.AND = new SqlAND(this);
+            this.OR = new SqlOR(this);
+            this.NOT = new SqlNOT(this);
+            this.TokenEvaluatorInstance = tokenEvaluator;            
         }
     }
 }

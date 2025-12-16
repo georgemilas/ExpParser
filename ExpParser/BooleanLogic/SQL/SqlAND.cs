@@ -8,6 +8,9 @@ namespace ExpParser.BooleanLogic.SQL
 {
     public class SqlAND : SQLOperator, IOperator
     {
+        public SqlAND() : base() { }
+        public SqlAND(ISemantic semantic) : base(semantic) { }
+
         //obj is always null, as we are not really evaluating anything but transforming the keywords text into a SQL WHERE clause as string
         public object Evaluate(object obj, IEvaluableExpression exp) { throw new EvaluationException("IOperator._AND -> cannot evaluate one element, needs a list of elements"); }
         public object Evaluate(object obj, List<IEvaluableExpression> exps)

@@ -6,6 +6,9 @@ namespace ExpParser.BooleanLogic.SQL
 {
     public class SqlNOT : SQLOperator, IOperator
     {
+        public SqlNOT() : base() { }
+        public SqlNOT(ISemantic semantic) : base(semantic) { }
+
         //obj is always null, as we are not really evaluating anything but transforming the keywords text into a SQL WHERE clause as string
         public object Evaluate(object obj, IEvaluableExpression exp)
         {

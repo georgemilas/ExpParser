@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace ExpParser.BooleanLogic.TextSearch
 {
-    public class TextSearchSemantic: BooleanLogicSemantic
+    public class TextSearchSemantic: BooleanLogicSemantic, ITokenEvaluator
     {
         public TextSearchSemantic()
         {
@@ -13,8 +13,10 @@ namespace ExpParser.BooleanLogic.TextSearch
             this.AND = new SearchAND();
             this.OR = new SearchOR();
             this.NOT = new SearchNOT();
-            this.TokenEvaluator = this.KeywordFinder;
+            this.TokenEvaluatorInstance = this;            
         }
+
+        public override Func<object, string, object> TokenEvaluator { get => this.KeywordFinder; }
 
         //obj is a string text 
         public object KeywordFinder(object obj, string token)

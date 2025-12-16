@@ -5,9 +5,11 @@ using System.Collections.Generic;
 
 namespace ExpParser.BooleanLogic.SQL
 {
-    public class SqlOR : SQLOperator, IOperator
-    {
-        //obj is always null, as we are not really evaluating anything but transforming the keywords text into a SQL WHERE clause as string
+    public class SqlOR : SQLOperator, IOperator    
+    {        
+        public SqlOR() : base() { }
+        public SqlOR(ISemantic semantic) : base(semantic) { }
+
         public object Evaluate(object obj, IEvaluableExpression exp) { throw new EvaluationException("IOperator._AND -> cannot evaluate one element, needs a list of elements"); }
         public object Evaluate(object obj, List<IEvaluableExpression> exps)
         {

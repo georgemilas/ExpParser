@@ -2,8 +2,8 @@ using System;
 
 namespace ExpParser
 {
-    public interface ISemantic
+    public interface ISemantic: ITokenEvaluator
     {
-        Token.TokenEvaluatorFunction TokenEvaluator { get; set;}
+        ITokenEvaluator TokenEvaluatorInstance { get; set;}         
     }
 }

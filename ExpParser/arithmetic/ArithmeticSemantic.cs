@@ -2,6 +2,7 @@
 using ExpParser.Exceptions;
 using System.Text.RegularExpressions;
 using ExtParser.Extensions;
+using System.Reflection.Metadata.Ecma335;
 
 namespace ExpParser.Arithmetic
 {
@@ -13,8 +14,7 @@ namespace ExpParser.Arithmetic
         public IOperator DIV { get; set; }      // /
         public IOperator POW { get; set; }      // ^     
 
-        public Token.TokenEvaluatorFunction TokenEvaluator { get; set; }
-
+        private Func<object, string, object> _arithmeticTokenEvaluator;
         public ArithmenticSemantic()
         {
             this.PLUS = new Plus();
@@ -22,8 +22,8 @@ namespace ExpParser.Arithmetic
             this.MUL = new Multiply();
             this.DIV = new Division();
             this.POW = new Pow();
-
-            TokenEvaluator = (object obj, string token) =>
+            
+            _arithmeticTokenEvaluator = (object obj, string token) =>
             {
                 //obj should always be null ;
                 int i;
@@ -57,10 +57,14 @@ namespace ExpParser.Arithmetic
                     return l;
                 }
                 return i;
-            };
+            };            
 
         }
 
+        public virtual Func<object, string, object> TokenEvaluator { get => this._arithmeticTokenEvaluator; }
+
+        public ITokenEvaluator TokenEvaluatorInstance { get { return this; } set { } }
+        
 
     }
 }
