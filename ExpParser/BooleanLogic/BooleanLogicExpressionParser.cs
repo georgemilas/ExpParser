@@ -7,10 +7,21 @@ namespace ExpParser.BooleanLogic
 {
 
     /// <summary>
+    ///   Provide a keywords expression parser with boolean logic so the following rules apply:
+    /// 
     ///   - space(s) is an OR, & is an AND, ! is a NOT
     ///   - "k1 k2" same as "k1 or k2" 
     ///   - "k1 k2 & !k3" same as "k1 or (k2 and not k3)"
     ///   - precedence table in descending order: not and or
+    /// 
+    /// <param name="keywordsExpressionString">Evaluable expression string containing keywords and logical operators</param>
+    /// <param name="semantic">
+    ///    IBooleanLogicSemantic to evaluate against custom contexts 
+    ///      e.g. - SQL generation SQLSemantic, 
+    ///           - real time evaluation against text TextSearchSemantic
+    ///           - etc
+    /// </param>
+    /// 
     /// </summary>
     public class BooleanLogicExpressionParser: ExpBaseParser
     {

@@ -34,7 +34,7 @@ namespace ExpParser.BooleanLogic.SQL
             if (opr == " OR " && evalInstance.operatorType == SQLTokenEvaluator.OPERATOR_TYPE.ILIKE_ANY_ARRAY && allConstants)
             {
                 // Handle LIKE_ANY_ARRAY operator type
-                var arr = exps.Map(a => $"'%{(string)a.Evaluate(opr)}%'"); 
+                var arr = exps.Map(a => $"'%{SQLTokenEvaluator.EscapeArrayLike(((Token)a).token)}%'");   //it's a constant token , just grab it no need to evaluate
                 if (arr.Count() > 0)
                 {
                     string token = string.Join(",", arr);

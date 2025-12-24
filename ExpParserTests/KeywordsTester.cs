@@ -19,6 +19,7 @@ namespace ExpParser.Tests.BooleanLogic
 
             Assert.False((bool)parser.Evaluate("paul milas and andrew are going to see a movie"));
             Assert.True((bool)parser.Evaluate("\"paul milas\" and george are going to see a movie"));
+            Assert.True((bool)parser.Evaluate("paul milas and george are going to see a movie"));
             Assert.False((bool)parser.Evaluate("paul and george milas are going to see a movie"));
             Assert.True((bool)parser.Evaluate("george, maria, andrew and mona are going to see a movie"));
         }
@@ -60,22 +61,16 @@ namespace ExpParser.Tests.BooleanLogic
         /// (george {"paul milas"}) & !{\d}
         /// </summary>
         [Fact]
-        public void Test_KeywordsExpressionParser_SQL2()
+        public void Test_KeywordsExpressionParser_regex_SQL()
         {
-            string kw = "(george {\"paul milas\"}) & !{\\d}";
+            string kw = "(george {paul milas}) & !{\\d*}";
             SQLTokenEvaluator te = new SQLTokenEvaluator("name", SQLTokenEvaluator.OPERATOR_TYPE.EQUAL, SQLTokenEvaluator.FIELD_TYPE.STRING);
             var parser = new KeywordsExpressionParser(kw, new SQLSemantic(te));
             var res = (string)parser.Evaluate(null);
-            var mustBe = "(((name='george') OR (name='{\"paul milas\"}')) AND NOT ((name='{\\d}')))";
+            var mustBe = "(((name='george') OR ((name ~* 'paul milas'))) AND NOT (((name ~* '\\d*'))))";
             
             Assert.Equal(mustBe, res);
         }
-
-
-
-
-
-
 
 
         /// <summary>
@@ -97,18 +92,24 @@ namespace ExpParser.Tests.BooleanLogic
         /// paris / paris and not louvre  LIKE ANY ARRAY
         /// </summary>
         [Fact]
-        public void Test_BooleanLogicExpressionParser_PostgreSQL_ilike_array_basic()
+        public void Test_KeywordsExpressionParser_PostgreSQL_ilike_array_basic()
         {
             var te = new SQLTokenEvaluator("image_path", SQLTokenEvaluator.OPERATOR_TYPE.ILIKE_ANY_ARRAY, SQLTokenEvaluator.FIELD_TYPE.STRING);
-            var parser = new BooleanLogicExpressionParser("paris", new SQLSemantic(te));
+            var parser = new KeywordsExpressionParser("paris", new SQLSemantic(te));
             string where = (string)parser.Evaluate(null);
             var mustBe = "(image_path ILIKE '%paris%')";
 
             Assert.Equal(mustBe, where);
 
-            parser = new BooleanLogicExpressionParser("paris and not louvre", new SQLSemantic(te));
+            parser = new KeywordsExpressionParser("paris and not louvre", new SQLSemantic(te));
             where = (string)parser.Evaluate(null);
             mustBe = "((image_path ILIKE '%paris%') AND NOT ((image_path ILIKE '%louvre%')))";
+
+            Assert.Equal(mustBe, where);
+
+            parser = new KeywordsExpressionParser($"\"paris france\"", new SQLSemantic(te));
+            where = (string)parser.Evaluate(null);
+            mustBe = "(image_path ILIKE '%paris france%')";
 
             Assert.Equal(mustBe, where);
 
@@ -119,10 +120,10 @@ namespace ExpParser.Tests.BooleanLogic
         /// (maria gheorghe) and not (andrew anthony)   LIKE ANY ARRAY
         /// </summary>
         [Fact]
-        public void Test_BooleanLogicExpressionParser_PostgreSQL_ilike_array()
+        public void Test_KeywordsExpressionParser_PostgreSQL_ilike_array()
         {
             var te = new SQLTokenEvaluator("fld_name", SQLTokenEvaluator.OPERATOR_TYPE.ILIKE_ANY_ARRAY, SQLTokenEvaluator.FIELD_TYPE.STRING);
-            var parser = new BooleanLogicExpressionParser("(maria gheorghe) and not (andrew anthony)", new SQLSemantic(te));
+            var parser = new KeywordsExpressionParser("(maria gheorghe) and not (andrew anthony)", new SQLSemantic(te));
             string where = (string)parser.Evaluate(null);
             var mustBe = "((fld_name ILIKE ANY(ARRAY['%maria%','%gheorghe%'])) AND NOT ((fld_name ILIKE ANY(ARRAY['%andrew%','%anthony%']))))";
 
@@ -134,17 +135,35 @@ namespace ExpParser.Tests.BooleanLogic
         /// (barcelona and (8024 8004 981)) or (barcelona and phone and (3932 448 5453))  LIKE ANY ARRAY
         /// </summary>
         [Fact]
-        public void Test_BooleanLogicExpressionParser_PostgreSQL_ilike_array_complex()
+        public void Test_KeywordsExpressionParser_PostgreSQL_ilike_array_complex()
         {
             var te = new SQLTokenEvaluator("image_path", SQLTokenEvaluator.OPERATOR_TYPE.ILIKE_ANY_ARRAY, SQLTokenEvaluator.FIELD_TYPE.STRING);
             string expr = @"(barcelona and (8024 8004 981)) or (barcelona and phone and (3932 448 5453))";
-            var parser = new BooleanLogicExpressionParser(expr, new SQLSemantic(te));
+            var parser = new KeywordsExpressionParser(expr, new SQLSemantic(te));
             string where = (string)parser.Evaluate(null);
             var mustBe = "(((image_path ILIKE '%barcelona%') AND (image_path ILIKE ANY(ARRAY['%8024%','%8004%','%981%']))) OR ((image_path ILIKE '%barcelona%') AND (image_path ILIKE '%phone%') AND (image_path ILIKE ANY(ARRAY['%3932%','%448%','%5453%']))))";
             Assert.Equal(mustBe, where);
         }
 
+        /// <summary>
+        /// (barcelona and (8024 8004 981)) or (barcelona and phone and (3932 448 5453))  LIKE ANY ARRAY
+        /// </summary>
+        [Fact]
+        public void Test_KeywordsExpressionParser_PostgreSQL_ilike_array_complex2()
+        {
+            var te = new SQLTokenEvaluator("image_path", SQLTokenEvaluator.OPERATOR_TYPE.ILIKE_ANY_ARRAY, SQLTokenEvaluator.FIELD_TYPE.STRING);
+            string expr = @"(mihai and not moni) liliana";
+            var parser = new KeywordsExpressionParser(expr, new SQLSemantic(te));
+            string where = (string)parser.Evaluate(null);
+            var mustBe = "(((image_path ILIKE '%mihai%') AND NOT ((image_path ILIKE '%moni%'))) OR (image_path ILIKE '%liliana%'))";
+            Assert.Equal(mustBe, where);
 
+            expr = "\"mihai's birthday\"";
+            parser = new KeywordsExpressionParser(expr, new SQLSemantic(te));
+            where = (string)parser.Evaluate(null);
+            mustBe = "(image_path ILIKE '%mihai''s birthday%')";
+            Assert.Equal(mustBe, where);
+        }
     }
 
 

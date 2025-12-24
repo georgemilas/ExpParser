@@ -5,20 +5,34 @@ using System.Text.RegularExpressions;
 namespace ExpParser.BooleanLogic
 {
     /// <summary>
+    ///   Extends BooleanLogicExpressionParser to provide a keywords expression parser adding literals and regex support with the following rules:
+    /// 
     ///   - space(s) is an OR, & is an AND, ! is a NOT
     ///   - "k1 k2" same as "k1 or k2" 
     ///   - "k1 k2 & !k3" same as "k1 or (k2 and not k3)"
-    ///   - 'k1 "some phrase"' same as 'k1 or "some phrase"' 
-    ///   - NOTE quotes " inside "some phrase" must be escaped with \ so "some\" phrase" and 
-    ///     if \" is needed then "some \\"phrase" because (\") will become (") after parsing so no need to escape escaping
-    ///                          "some \\\"phrase"  -> some \\"phrase
-    ///                          "some \\\\"phrase"  -> some \\\"phrase
-    ///   - k1 (k2 & {k3}) == k1 or (k2 and {k3}) where k3 may be a regular Expression
+    ///   - 'k1 "some phrase" k2' same as 'k1 or "some phrase" or k2' 
+    ///   - NOTE quotes " inside "some phrase" must be escaped with a backslash \ so "some\" phrase" and 
+    ///     if literal \" is needed then we must escape backslash so it becomes "some \\"phrase" 
+    ///   - k1 (k2 & {k3}) == k1 or (k2 and {k3}) where k3 and k4 are regular Expressions (keyword inside squarly braces) {regexp}
     ///   - precedence table in descending order: {exp} "exp" ! and or
     /// </summary>
+    /// <param name="keywordsExpressionString">Evaluable expression string containing keywords and logical operators</param>
+    /// <param name="semantic">
+    ///    - If not provided, TextSearchSemantic will be used which evaluates the expression against a given text
+    ///    - Otherwise a custom IBooleanLogicSemantic may be provided to evaluate against other contexts (e.g. SQL generation SQLSemantic)
+    /// </param>
     public class KeywordsExpressionParser : BooleanLogicExpressionParser
     {
+        /// <summary>
+        /// uses TextSearchSemantic to evaluates the expression against a given text
+        /// </summary>
+        /// <param name="keywordsExpressionString">Evaluable expression string containing keywords and logical operators</param>
         public KeywordsExpressionParser(string keywordsExpressionString) : base(keywordsExpressionString, new TextSearch.TextSearchSemantic()) { }
+        /// <summary>
+        /// uses the provided IBooleanLogicSemantic to evaluates the expression against a given context
+        /// </summary>
+        /// <param name="keywordsExpressionString">Evaluable expression string containing keywords and logical operators</param>
+        /// <param name="semantic">Custom semantic to evaluate the expression against a specific context</param>
         public KeywordsExpressionParser(string keywordsExpressionString, IBooleanLogicSemantic semantic) : base(keywordsExpressionString, semantic) { }
 
         private string CurlyBracesTokenHandler(string token, string tokenHash)
