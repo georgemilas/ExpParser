@@ -31,7 +31,8 @@ namespace ExpParser.BooleanLogic.SQL
 
             var evalInstance = (SQLTokenEvaluator)Semantic.TokenEvaluatorInstance;
             bool allConstants = exps.All(e => e.IsConstant);
-            if (opr == " OR " && evalInstance.operatorType == SQLTokenEvaluator.OPERATOR_TYPE.ILIKE_ANY_ARRAY && allConstants)
+            bool anyRegex = exps.Any(e => e is Token t && t.token.StartsWith("{") && t.token.EndsWith("}")); //if any regex don't use like(array(...)) 
+            if (opr == " OR " && evalInstance.operatorType == SQLTokenEvaluator.OPERATOR_TYPE.ILIKE_ANY_ARRAY && allConstants && !anyRegex)
             {
                 // Handle LIKE_ANY_ARRAY operator type
                 var arr = exps.Map(a => $"'%{SQLTokenEvaluator.EscapeArrayLike(((Token)a).token)}%'");   //it's a constant token , just grab it no need to evaluate

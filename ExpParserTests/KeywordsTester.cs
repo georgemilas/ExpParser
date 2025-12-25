@@ -163,6 +163,16 @@ namespace ExpParser.Tests.BooleanLogic
             where = (string)parser.Evaluate(null);
             mustBe = "(image_path ILIKE '%mihai''s birthday%')";
             Assert.Equal(mustBe, where);
+
+            expr = @"(\2023 and (_8847 _8855 _8842 _6891) and not (_6865-2))
+   (\2023 and Washington and (_8492 _8476  _8416 _152022 _121538 _8461 _8445 _132043 _131843 _130933 _121254) 
+    and not ({phone.*?_152022} {phone.*?_130933} {phone.*?_121254} blabla))";
+            parser = new KeywordsExpressionParser(expr, new SQLSemantic(te));
+            where = (string)parser.Evaluate(null);
+            mustBe = @"(((image_path ILIKE '%\\2023%') AND (image_path ILIKE ANY(ARRAY['%\_8847%','%\_8855%','%\_8842%','%\_6891%'])) AND NOT ((image_path ILIKE '%\_6865-2%'))) OR ((image_path ILIKE '%\\2023%') AND (image_path ILIKE '%washington%') AND (image_path ILIKE ANY(ARRAY['%\_8492%','%\_8476%','%\_8416%','%\_152022%','%\_121538%','%\_8461%','%\_8445%','%\_132043%','%\_131843%','%\_130933%','%\_121254%'])) AND NOT ((((image_path ~* 'phone.*?_152022')) OR ((image_path ~* 'phone.*?_130933')) OR ((image_path ~* 'phone.*?_121254')) OR (image_path ILIKE '%blabla%')))))";
+            Assert.Equal(mustBe, where);
+
+
         }
     }
 
