@@ -34,7 +34,7 @@ namespace ExpParser.Tests.BooleanLogic
             SQLTokenEvaluator te = new SQLTokenEvaluator("name", SQLTokenEvaluator.OPERATOR_TYPE.EQUAL, SQLTokenEvaluator.FIELD_TYPE.STRING);
             var parser = new KeywordsExpressionParser(kw, new SQLSemantic(te));
             string res = (string)parser.Evaluate(null);
-            string mustBe = "(((name='george') AND (((name='maria') AND (name='andrew')) OR (name='paul milas'))) OR (name='mona') OR (name='eugen') OR (name='milas family'))";
+            string mustBe = "((name='george' AND ((name='maria' AND name='andrew') OR name='paul milas')) OR name='mona' OR name='eugen' OR name='milas family')";
 
             Assert.Equal(mustBe, res);
         }
@@ -67,7 +67,7 @@ namespace ExpParser.Tests.BooleanLogic
             SQLTokenEvaluator te = new SQLTokenEvaluator("name", SQLTokenEvaluator.OPERATOR_TYPE.EQUAL, SQLTokenEvaluator.FIELD_TYPE.STRING);
             var parser = new KeywordsExpressionParser(kw, new SQLSemantic(te));
             var res = (string)parser.Evaluate(null);
-            var mustBe = "(((name='george') OR ((name ~* 'paul milas'))) AND NOT (((name ~* '\\d*'))))";
+            var mustBe = "((name='george' OR (name ~* 'paul milas')) AND NOT ((name ~* '\\d*')))";
             
             Assert.Equal(mustBe, res);
         }
@@ -83,7 +83,7 @@ namespace ExpParser.Tests.BooleanLogic
             //using BooleanLogicExpressionParser instead of KeywordsExpressionParser is OK as we are not using neither RegEx nor quoted strings
             var parser = new BooleanLogicExpressionParser("(maria gheorghe) and not (andrew anthony)", new SQLSemantic(te));
             string where = (string)parser.Evaluate(null);
-            var mustBe = "(((fld_name LIKE '%maria%') OR (fld_name LIKE '%gheorghe%')) AND NOT (((fld_name LIKE '%andrew%') OR (fld_name LIKE '%anthony%'))))";
+            var mustBe = "((fld_name LIKE '%maria%' OR fld_name LIKE '%gheorghe%') AND NOT ((fld_name LIKE '%andrew%' OR fld_name LIKE '%anthony%')))";
 
             Assert.Equal(mustBe, where);
         }
@@ -97,19 +97,19 @@ namespace ExpParser.Tests.BooleanLogic
             var te = new SQLTokenEvaluator("image_path", SQLTokenEvaluator.OPERATOR_TYPE.ILIKE_ANY_ARRAY, SQLTokenEvaluator.FIELD_TYPE.STRING);
             var parser = new KeywordsExpressionParser("paris", new SQLSemantic(te));
             string where = (string)parser.Evaluate(null);
-            var mustBe = "(image_path ILIKE '%paris%')";
+            var mustBe = "image_path ILIKE '%paris%'";
 
             Assert.Equal(mustBe, where);
 
             parser = new KeywordsExpressionParser("paris and not louvre", new SQLSemantic(te));
             where = (string)parser.Evaluate(null);
-            mustBe = "((image_path ILIKE '%paris%') AND NOT ((image_path ILIKE '%louvre%')))";
+            mustBe = "(image_path ILIKE '%paris%' AND NOT (image_path ILIKE '%louvre%'))";
 
             Assert.Equal(mustBe, where);
 
             parser = new KeywordsExpressionParser($"\"paris france\"", new SQLSemantic(te));
             where = (string)parser.Evaluate(null);
-            mustBe = "(image_path ILIKE '%paris france%')";
+            mustBe = "image_path ILIKE '%paris france%'";
 
             Assert.Equal(mustBe, where);
 
@@ -141,7 +141,7 @@ namespace ExpParser.Tests.BooleanLogic
             string expr = @"(barcelona and (8024 8004 981)) or (barcelona and phone and (3932 448 5453))";
             var parser = new KeywordsExpressionParser(expr, new SQLSemantic(te));
             string where = (string)parser.Evaluate(null);
-            var mustBe = "(((image_path ILIKE '%barcelona%') AND (image_path ILIKE ANY(ARRAY['%8024%','%8004%','%981%']))) OR ((image_path ILIKE '%barcelona%') AND (image_path ILIKE '%phone%') AND (image_path ILIKE ANY(ARRAY['%3932%','%448%','%5453%']))))";
+            var mustBe = "((image_path ILIKE '%barcelona%' AND (image_path ILIKE ANY(ARRAY['%8024%','%8004%','%981%']))) OR (image_path ILIKE '%barcelona%' AND image_path ILIKE '%phone%' AND (image_path ILIKE ANY(ARRAY['%3932%','%448%','%5453%']))))";
             Assert.Equal(mustBe, where);
         }
 
@@ -155,13 +155,13 @@ namespace ExpParser.Tests.BooleanLogic
             string expr = @"(mihai and not moni) liliana";
             var parser = new KeywordsExpressionParser(expr, new SQLSemantic(te));
             string where = (string)parser.Evaluate(null);
-            var mustBe = "(((image_path ILIKE '%mihai%') AND NOT ((image_path ILIKE '%moni%'))) OR (image_path ILIKE '%liliana%'))";
+            var mustBe = "((image_path ILIKE '%mihai%' AND NOT (image_path ILIKE '%moni%')) OR image_path ILIKE '%liliana%')";
             Assert.Equal(mustBe, where);
 
             expr = "\"mihai's birthday\"";
             parser = new KeywordsExpressionParser(expr, new SQLSemantic(te));
             where = (string)parser.Evaluate(null);
-            mustBe = "(image_path ILIKE '%mihai''s birthday%')";
+            mustBe = "image_path ILIKE '%mihai''s birthday%'";
             Assert.Equal(mustBe, where);
 
             expr = @"(\2023 and (_8847 _8855 _8842 _6891) and not (_6865-2))
@@ -169,7 +169,7 @@ namespace ExpParser.Tests.BooleanLogic
     and not ({phone.*?_152022} {phone.*?_130933} {phone.*?_121254} blabla))";
             parser = new KeywordsExpressionParser(expr, new SQLSemantic(te));
             where = (string)parser.Evaluate(null);
-            mustBe = @"(((image_path ILIKE '%\\2023%') AND (image_path ILIKE ANY(ARRAY['%\_8847%','%\_8855%','%\_8842%','%\_6891%'])) AND NOT ((image_path ILIKE '%\_6865-2%'))) OR ((image_path ILIKE '%\\2023%') AND (image_path ILIKE '%washington%') AND (image_path ILIKE ANY(ARRAY['%\_8492%','%\_8476%','%\_8416%','%\_152022%','%\_121538%','%\_8461%','%\_8445%','%\_132043%','%\_131843%','%\_130933%','%\_121254%'])) AND NOT ((((image_path ~* 'phone.*?_152022')) OR ((image_path ~* 'phone.*?_130933')) OR ((image_path ~* 'phone.*?_121254')) OR (image_path ILIKE '%blabla%')))))";
+            mustBe = @"((image_path ILIKE '%\\2023%' AND (image_path ILIKE ANY(ARRAY['%\_8847%','%\_8855%','%\_8842%','%\_6891%'])) AND NOT (image_path ILIKE '%\_6865-2%')) OR (image_path ILIKE '%\\2023%' AND image_path ILIKE '%washington%' AND (image_path ILIKE ANY(ARRAY['%\_8492%','%\_8476%','%\_8416%','%\_152022%','%\_121538%','%\_8461%','%\_8445%','%\_132043%','%\_131843%','%\_130933%','%\_121254%'])) AND NOT (((image_path ~* 'phone.*?_152022') OR (image_path ~* 'phone.*?_130933') OR (image_path ~* 'phone.*?_121254') OR image_path ILIKE '%blabla%'))))";
             Assert.Equal(mustBe, where);
 
 

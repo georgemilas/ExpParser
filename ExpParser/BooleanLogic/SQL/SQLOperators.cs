@@ -39,8 +39,28 @@ namespace ExpParser.BooleanLogic.SQL
                 if (arr.Count() > 0)
                 {
                     string token = string.Join(",", arr);
-                    return $"({evalInstance.fields[0]} ILIKE ANY(ARRAY[{token}]))";
+                    return $"{evalInstance.fields.DefaultField} ILIKE ANY(ARRAY[{token}])";
                 }   
+            }
+
+            bool allAi = exps.All(e => e is Token t && t.token.StartsWith("{ai:") && t.token.EndsWith("}")); //if any regex don't use like(array(...)) 
+            bool allFace = exps.All(e => e is Token t && t.token.StartsWith("{face:") && t.token.EndsWith("}")); //if any regex don't use like(array(...)) 
+            if (allAi || allFace)
+            {
+                var arr = exps.Map(a => {
+                        var token = ((Token)a).token;
+                        token = allAi ? token.Substring(4, token.Length - 5)
+                                      : allFace ? token.Substring(6, token.Length - 7)
+                                                : token;
+                        token = token.ToLower();
+                        return $"'{SQLTokenEvaluator.EscapeArrayLike(token)}'";
+                    });   //it's a constant token , just grab it no need to evaluate
+                if (arr.Count() > 0)
+                {
+                    string token = string.Join(",", arr);
+                    string op = opr == " OR " ? "&&" : "@>";
+                    return $"{evalInstance.fields.FaceField} {op} ARRAY[{token}]";
+                }
             }
 
             List<string> res = new List<string>();
